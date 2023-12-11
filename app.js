@@ -52,6 +52,17 @@ app.use('/api/auth', authRouter);
 app.use('/api/buyer', buyerRouter);
 app.use('/api/seller', sellerRouter);
 
+// const product = require("./Entities/products")
+
+// async function call(){
+
+//     const d = new product({name:"jacket",price:"5000"})
+//    const b= await d.save();
+//    console.log(b)
+// }
+
+// call();
+
 
 
 
