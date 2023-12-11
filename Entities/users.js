@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const Schema = new mongoose.Schema({
     username : {
         type: String,
-        required: true
+        required: true,
+        unique:[true,"user name allready exist"]
     },
     UserType: {
         type:String,

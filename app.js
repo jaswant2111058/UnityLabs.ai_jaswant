@@ -8,6 +8,11 @@ const cors = require('cors')
 
 const app = express();
 
+
+
+
+
+
 mongoose.set('strictQuery', true)
 mongoose.connect(process.env.DB_URI, {
     useNewUrlParser: true,
@@ -26,11 +31,28 @@ app.use(
     })
 );
 
+
+const authRouter = require('./apiRoutes/auth');
+const buyerRouter = require('./apiRoutes/buyers');
+const sellerRouter = require('./apiRoutes/sellers');
+
+
+
+
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+
+app.use('/api/auth', authRouter);
+app.use('/api/buyer', buyerRouter);
+app.use('/api/seller', sellerRouter);
+
+
 
 
 
