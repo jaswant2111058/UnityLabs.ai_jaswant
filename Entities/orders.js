@@ -13,7 +13,7 @@ const Schema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    product_id: Array,
+    items: Array,
 },
     {
         timestamps: true
