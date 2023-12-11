@@ -1,35 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const { body, query, param } = require('express-validator');
-const controllers = require("../controller/loginRegister")
+const { body } = require('express-validator');
+const controllers = require('../controller/loginRegister');
 
+// Route to get the list of sellers
+router.get('/list-of-sellers', controllers.list_of_sellers);
 
-router.get('/list-of-sellers',
+// Route to get a seller's catalog
+router.get('/seller-catalog/:seller_id', controllers.seller_catalog);
+
+// Route to create a new order for a seller
+router.post(
+  '/create-order/:seller_id',
   [
-    body('username').exists().withMessage('name is required'),
-    body('password').exists().withMessage('Password is required'),
-    body('userType').exists().withMessage('User Type is required'),
-   ], 
-   controllers.register
-);
-
-router.get('/seller-catalog/:seller_id',
-  [
-    body('email').exists().withMessage('email is required'),
-    body('password').exists().withMessage('Password is required'),
+    body('list_of_items').exists().withMessage('list_of_items is required'),
   ],
-  controllers.login
+  controllers.create_order
 );
 
-
-
-router.post('/create-order/:seller_id',
-  [
-    body('email').exists().withMessage('email is required'),
-    body('password').exists().withMessage('Password is required'),
-  ],
-  controllers.login
-);
-
+// Error handling middleware
+router.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).send({ message: 'Internal Server Error' });
+});
 
 module.exports = router;
