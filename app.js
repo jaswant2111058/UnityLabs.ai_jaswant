@@ -5,28 +5,8 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors')
-const  {createServer} = require('http');
-const  {Server} = require("socket.io")
 
 const app = express();
-const httpServer = createServer(app);
-const io = new Server(httpServer,{
-    cors: {
-      origin: "*",  
-      methods: ["GET", "POST"]
-    }
-})
-io.on('connection', (socket) => {
-    console.log('a user connected');
-    socket.on('disconnect', () => {
-      console.log('user disconnected');
-    });
-  });
-
-app.use((req,res,next) => {
-    req.io = io;
-    next();
-})
 
 mongoose.set('strictQuery', true)
 mongoose.connect(process.env.DB_URI, {
@@ -54,6 +34,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-httpServer.listen(process.env.PORT || '5000', () => {
+app.listen(process.env.PORT || '5000', () => {
     console.log(`Server started at port ${process.env.PORT || '5000'}`);
 });
