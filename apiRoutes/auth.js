@@ -18,7 +18,7 @@ router.post('/register',
 router.post('/login',
   
 [
-    body('email').exists().withMessage('email is required'),
+    body('username').exists().withMessage('username is required'),
     body('password').exists().withMessage('Password is required'),
 ],
 

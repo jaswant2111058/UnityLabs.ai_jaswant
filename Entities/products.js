@@ -9,9 +9,6 @@ const Schema = new mongoose.Schema({
         type:String,
         required: true
     },
-    seller_id:{
-        type:String
-    }
 },
 {
     timestamps: true

@@ -3,68 +3,40 @@ const orders = require("../Entities/orders");
 const catalogs = require("../Entities/catalogs");
 const products = require("../Entities/products");
 
-// Get list of sellers
-exports.list_of_sellers = async (req, res) => {
+// Controller for creating a new catalog
+exports.create_catalog = async (req, res) => {
     try {
-        const data = await users.find({ userType: "seller" });
-
-        // Transforming data to send to the client
-        const dataToSend = data.map((item) => ({
-            seller_id: item._id,
-            seller_name: item.username
-        }));
-
-        res.status(200).send(dataToSend);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send({
-            message: "Something went wrong"
-        });
-    }
-};
-
-// Get catalog of a specific seller
-exports.seller_catalog = async (req, res) => {
-    try {
-        const _id = req.params.seller_id;
-        const data = await catalogs.findById({ _id });
-
-        // Fetching product details for each product in the catalog
-        const dataToSend = await Promise.all(
-            data.product_id.map(async (item) => await products.findById({ _id: item }))
-        );
-
-        res.status(200).send(dataToSend);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send({
-            message: "Something went wrong"
-        });
-    }
-};
-
-// Create a new order
-exports.create_order = async (req, res) => {
-    try {
-        const _id = req.params.seller_id;
         const list_of_items = req.body.list_of_items;
-        const data = await catalogs.findById({ _id });
 
-        // Creating a new order and saving it
-        const newOrder = new orders({
-            seller_id: _id,
-            items: list_of_items,
-            catalog_id: data._id,
-            buyer_id: req._id
-        });
+        // Validate the format of list_of_items (assuming it should be an array)
+        if (!list_of_items || !Array.isArray(list_of_items)) {
+            return res.status(400).send({ message: "Invalid list_of_items format" });
+        }
 
-        await newOrder.save();
+        // Create a new catalog with the seller's ID and the provided items
+        const newCatalog = new catalogs({ seller_id: req._id, items: list_of_items });
 
-        res.status(200).send({ message: "Order has been created successfully" });
+        // Save the new catalog to the database
+        await newCatalog.save();
+
+        res.status(200).send({ message: "New catalog has been created" });
     } catch (err) {
-        console.log(err);
-        res.status(500).send({
-            message: "Something went wrong"
-        });
+        console.error(err);
+        res.status(500).send({ message: "Something went wrong" });
+    }
+};
+
+// Controller for fetching orders of a specific seller
+exports.orders = async (req, res) => {
+    try {
+        // Find orders in the database based on the seller's ID
+        const data = await orders.find({ seller_id: req._id });
+
+        res.status(200).send(data);
+    } catch (err) {
+      
+        console.error(err);
+        res.status(500).send({ message: "Something went wrong" });
+        
     }
 };

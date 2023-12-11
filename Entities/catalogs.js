@@ -6,7 +6,7 @@ const Schema = new mongoose.Schema({
         required: true,
         unique:[true," already exist"],
     },
-    product_id:[],
+    items:Array,
 },
 {
     timestamps: true

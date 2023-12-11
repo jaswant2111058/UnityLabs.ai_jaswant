@@ -1,30 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const { body, query, param } = require('express-validator');
-const controllers = require("../controller/loginRegister")
+const { body } = require('express-validator');
+const controllers = require('../controller/loginRegister');
 
-
-router.get('/create-catalog',
+// Route to create a new product in the catalog
+router.post(
+  '/create-product',
   [
-    body('username').exists().withMessage('name is required'),
-    body('password').exists().withMessage('Password is required'),
-    body('userType').exists().withMessage('User Type is required'),
-   ], 
-   controllers.register
-);
-
-
-
-
-router.get('/orders',
-  [
-    body('email').exists().withMessage('email is required'),
-    body('password').exists().withMessage('Password is required'),
+    body('list_of_items').exists().withMessage('list_of_items Type is required'),
   ],
-  controllers.login
+  controllers.create_catalog
 );
 
+// Route to get a list of orders
+router.get('/orders', controllers.orders);
 
-
+// Error handling middleware
+router.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).send({ message: 'Internal Server Error' });
+});
 
 module.exports = router;
