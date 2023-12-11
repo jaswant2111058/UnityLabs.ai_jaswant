@@ -5,10 +5,10 @@ const controllers = require('../controllers/buyers');
 const middleWare = require("../middlewares/auth")
 
 // Route to get the list of sellers
-router.get('/list-of-sellers', controllers.list_of_sellers,  middleWare.authMiddleware,  middleWare.checkBuyer);
+router.get('/list-of-sellers',   middleWare.authMiddleware,controllers.list_of_sellers,);
 
 // Route to get a seller's catalog
-router.get('/seller-catalog/:seller_id', controllers.seller_catalog,   middleWare.authMiddleware,  middleWare.checkBuyer);
+router.get('/seller-catalog/:seller_id',   middleWare.authMiddleware,  controllers.seller_catalog,);
 
 // Route to create a new order for a seller
 router.post(
@@ -16,7 +16,7 @@ router.post(
   [
     body('list_of_items').exists().withMessage('list_of_items is required'),
   ],
-  controllers.create_order,middleWare.authMiddleware,middleWare.checkBuyer
+  middleWare.authMiddleware,controllers.create_order,
 );
 
 // Error handling middleware

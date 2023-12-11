@@ -6,7 +6,7 @@ const Schema = new mongoose.Schema({
         required: true,
         unique:[true,"user name allready exist"]
     },
-    UserType: {
+    userType: {
         type:String,
         enum:["seller","buyer"],
         required: true

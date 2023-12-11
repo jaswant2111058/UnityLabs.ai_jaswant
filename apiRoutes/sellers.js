@@ -4,17 +4,16 @@ const { body } = require('express-validator');
 const controllers = require('../controllers/sellers');
 const middleWare = require("../middlewares/auth")
 
-// Route to create a new product in the catalog
-router.post(
-  '/create-product',
+// Route to create catalog
+router.post( '/create-catalog',
   [
     body('list_of_items').exists().withMessage('list_of_items Type is required'),
   ],
-  controllers.create_catalog, middleWare.authMiddleware,middleWare.checkSeller
+   middleWare.authMiddleware,middleWare.checkSeller,controllers.create_catalog,
 );
 
 // Route to get a list of orders
-router.get('/orders', controllers.orders, middleWare.authMiddleware, middleWare.checkSeller);
+router.get('/orders', middleWare.authMiddleware, middleWare.checkSeller,controllers.orders,);
 
 // Error handling middleware
 router.use((err, req, res, next) => {

@@ -77,23 +77,3 @@ exports.checkSeller =  async (req,res,next)=>{
 
 
 
-
-
-
-exports.checkBuyer =  async (req,res,next)=>{
-    try{
-
-        if(req.userType === "buyer") next();
-        else{
-            return res.status(401).json({
-                message: "You are not seller"
-            });
-        }
-    }
-    catch(err){
-
-        console.log(err)
-        res.status(500).send(err)
-
-    }
-} 

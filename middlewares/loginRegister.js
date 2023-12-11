@@ -14,6 +14,9 @@ exports.register = async (req, res) => {
             password,
 
         } = req.body;
+
+        if(!username || !userType || !password) return res.status(401).send({message:"all filed are required"})
+
         console.log(req.body)
         const preUsername = await users.findOne({ username });
 
@@ -26,7 +29,6 @@ exports.register = async (req, res) => {
 
         res.status(200).json({
             messege: "user register succesfuly",
-            data: data
         })
 
     } catch (error) {
@@ -44,6 +46,7 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         const { username, password } = req.body;
+        if(!username || !password) return res.status(401).send({message:"all filed are required"})
         console.log(req.body)
         const user = await users.findOne({ username });
         if (!user) {
@@ -61,7 +64,7 @@ exports.login = async (req, res) => {
         }
 
         // generate jwt
-        const token = jwt.sign({ _id : user_id , userType : user.userType }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ _id : user._id , userType : user.userType }, process.env.JWT_SECRET, {
             expiresIn: "1d"
         });
 
